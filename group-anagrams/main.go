@@ -1,28 +1,20 @@
 package main
 
-import "slices"
-
-// Time complexity: O(n)
-// Total nya: O(n . k log k)
+// Time complexity: O(n*m)
 func groupAnagrams(strs []string) [][]string {
-	groups := make(map[string][]string)
+	grouped := make(map[[26]byte][]string)
 
 	for _, str := range strs {
-		strSorted := sortString(str)
-		groups[strSorted] = append(groups[strSorted], str)
+		var key [26]byte
+		for _, char := range str {
+			key[char-'a']++
+		}
+		grouped[key] = append(grouped[key], str)
 	}
 
-	var res [][]string
-
-	for _, strs := range groups {
-		res = append(res, strs)
+	res := make([][]string, 0, len(grouped))
+	for _, group := range grouped {
+		res = append(res, group)
 	}
 	return res
-}
-
-// Time complexity: O(k log k)
-func sortString(str string) string {
-	chars := []rune(str)
-	slices.Sort(chars)
-	return string(chars)
 }
